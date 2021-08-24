@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/alicedeschutter/code/alicedeschutter/TaxiFareModel/mlruns/1/84a53db109d641e0b66f22a27a6ec58b/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 84a53db109d641e0b66f22a27a6ec58b
+run_uuid: 84a53db109d641e0b66f22a27a6ec58b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1629808856872
+status: 1
+tags: []
+user_id: unknown
