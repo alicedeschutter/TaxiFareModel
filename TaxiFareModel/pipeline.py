@@ -2,6 +2,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from TaxiFareModel.encoders import TimeFeaturesEncoder, DistanceTransformer
+from sklearn.linear_model import LinearRegression
+
 
 class TaxifarePipeline:
 
@@ -24,12 +26,11 @@ class TaxifarePipeline:
             ('time', time_pipe, ['pickup_datetime'])
         ], remainder="drop")
 
-        from sklearn.linear_model import LinearRegression
-
         # Add the model of your choice to the pipeline
+
         pipe = Pipeline([
             ('preproc', preproc_pipe),
-            ('linear_model', LinearRegression())
-        ])
+            ('model', LinearRegression()
+             )])
 
         return pipe

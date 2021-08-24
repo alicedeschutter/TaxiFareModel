@@ -2,9 +2,14 @@ from TaxiFareModel.pipeline import TaxifarePipeline
 from TaxiFareModel.utils import compute_rmse
 from TaxiFareModel.data import get_data, clean_data
 from sklearn.model_selection import train_test_split
+from termcolor import colored
 from memoized_property import memoized_property
 import mlflow
 from mlflow.tracking import MlflowClient
+import joblib
+from sklearn.linear_model import Ridge, LinearRegression, Lasso
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import GridSearchCV
 
 MLFLOW_URI = "https://mlflow.lewagon.co/"
 EXPERIMENT_NAME = "[SE] [Stockholm] [alicedeschutter] linear + 1"
@@ -23,18 +28,26 @@ class Trainer():
     def set_pipeline(self):
         """defines the pipeline as a class attribute"""
         pipeline = TaxifarePipeline()
-        self.pipe = pipeline.create_pipeline()
+        self.pipeline = pipeline.create_pipeline()
 
     def run(self):
         """set and train the pipeline"""
-        self.pipe.fit(self.X, self.y)
+        self.trained_model = self.pipeline.fit(self.X, self.y)
 
     def evaluate(self, X_test, y_test):
         """evaluates the pipeline on df_test and return the RMSE"""
-        y_pred = self.pipe.predict(X_test)
+        y_pred = self.pipeline.predict(X_test)
         RMSE = compute_rmse(y_pred, y_test)
         self.mlflow_log_metric('rmse', RMSE)
-        return RMSE
+        return round(RMSE, 2)
+
+    def gridsearch(self):
+        self.set_pipeline()
+        params = {'model':[LinearRegression(), Lasso(), Ridge(), RandomForestRegressor()]}
+        gridsearch = GridSearchCV(self.pipeline, params)
+        gridsearch.fit(self.X, self.y)
+        self.pipeline = gridsearch.best_estimator_
+        print(f"Grid Search Performed: {gridsearch.best_params_['model']} scoring is {gridsearch.best_score_}")
 
     @memoized_property
     def mlflow_client(self):
@@ -60,7 +73,9 @@ class Trainer():
 
     def save_model(self):
         """ Save the trained model into a model.joblib file """
-        pass
+
+        joblib.dump(self.pipeline, 'model.joblib')
+        print(colored("model.joblib saved locally", "green"))
 
 
 if __name__ == "__main__":
@@ -80,10 +95,17 @@ if __name__ == "__main__":
 
     # train
     trainer = Trainer(X_train, y_train)
+
     trainer.set_pipeline()
-    trainer.run()
     # evaluate
 
+    trainer.gridsearch()
+
+    trainer.run()
     print(trainer.evaluate(X_val, y_val))
     experiment_id = trainer.mlflow_experiment_id
     print(f"experiment URL: https://mlflow.lewagon.co/#/experiments/{experiment_id}")
+
+    #crossvalidate()
+
+    #trainer.save_model()
