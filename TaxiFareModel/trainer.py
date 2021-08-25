@@ -10,9 +10,12 @@ import joblib
 from sklearn.linear_model import Ridge, LinearRegression, Lasso
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
+from google.cloud import storage
 
 MLFLOW_URI = "https://mlflow.lewagon.co/"
 EXPERIMENT_NAME = "[SE] [Stockholm] [alicedeschutter] linear + 1"
+BUCKET_NAME="wagon-data-701-deschutter"
+
 
 class Trainer():
     def __init__(self, X, y):
@@ -77,11 +80,32 @@ class Trainer():
         joblib.dump(self.pipeline, 'model.joblib')
         print(colored("model.joblib saved locally", "green"))
 
+    def upload_model(self, bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        # The ID of your GCS bucket
+        # bucket_name = "your-bucket-name"
+        # The path to your file to upload
+        # source_file_name = "local/path/to/file"
+        # The ID of your GCS object
+        # destination_blob_name = "storage-object-name"
+
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print(
+            "File {} uploaded to {}.".format(
+                source_file_name, destination_blob_name
+            )
+        )
+
 
 if __name__ == "__main__":
 
     # get data
-    df = get_data()
+    df = get_data(nrows=1000)
 
     # clean data
     clean_df = clean_data(df)
@@ -108,4 +132,5 @@ if __name__ == "__main__":
 
     #crossvalidate()
 
-    #trainer.save_model()
+    trainer.save_model()
+    trainer.upload_model(BUCKET_NAME, "model.joblib", "models/model.joblib")
