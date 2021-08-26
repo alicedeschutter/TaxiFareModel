@@ -104,11 +104,12 @@ run_locally:
 
 #RUN ON CLOUD
 
-BUCKET_TRAINING_FOLDER=training
+# will store the packages uploaded to GCP for the training
+BUCKET_TRAINING_FOLDER='trainings'
 
 PYTHON_VERSION=3.7
 FRAMEWORK=scikit-learn
-RUNTIME_VERSION=1.15
+RUNTIME_VERSION=2.2
 
 PACKAGE_NAME=TaxiFareModel
 FILENAME=trainer
@@ -124,3 +125,8 @@ run_cloud:
 		--runtime-version=${RUNTIME_VERSION} \
 		--region ${REGION} \
 		--stream-logs
+
+##### Prediction API
+
+run_api:
+	uvicorn api.fast:app --reload  # load web server with code autoreload
