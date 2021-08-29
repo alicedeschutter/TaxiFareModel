@@ -1,9 +1,11 @@
-# Data analysis
+# TaxiFareModel
 
-- Title: TaxiFareModel
-- Description: Participating in the "New York City taxi fare prediction" playground competition in order to practice ML workflow. Used MLflow to log parameters/metrics and Google Cloud Platform to store data and make predictions.
+- Description: Participating in the "New York City taxi fare prediction" playground competition in order to practice ML workflow. I used MLflow to log parameters/metrics when running my ML code, as well as Google Cloud Platform to store data and make predictions.
+
 - Task: Predicting the fare amount (inclusive of tolls) for a taxi ride in New York City given the pickup and dropoff locations.
+
 - Data Source: https://www.kaggle.com/c/new-york-city-taxi-fare-prediction
+
 - Type of analysis: Regression Analysis
 
 # Startup the project
