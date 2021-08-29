@@ -1,10 +1,10 @@
 # Data analysis
-- Document here the project: TaxiFareModel
-- Description: Project Description
-- Data Source:
-- Type of analysis:
 
-Please document the project the better you can.
+- Title: TaxiFareModel
+- Description: Participating in the "New York City taxi fare prediction" playground competition in order to practice ML workflow. 
+- Task: Predicting the fare amount (inclusive of tolls) for a taxi ride in New York City given the pickup and dropoff locations.
+- Data Source: https://www.kaggle.com/c/new-york-city-taxi-fare-prediction
+- Type of analysis: Regression Analysis
 
 # Startup the project
 
